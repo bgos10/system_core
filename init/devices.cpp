@@ -573,13 +573,11 @@ static char **get_block_device_symlinks(struct uevent *uevent)
             link_num++;
         else
             links[link_num] = NULL;
+        if (asprintf(&links[link_num], "/dev/block/bootdevice/by-name/%s", p) > 0)
+            link_num++;
+        else
+            links[link_num] = NULL;
 
-        if (is_bootdevice > 0) {
-            if (asprintf(&links[link_num], "/dev/block/bootdevice/by-name/%s", p) > 0)
-                link_num++;
-            else
-                links[link_num] = NULL;
-        }
         free(p);
     }
 
@@ -588,13 +586,10 @@ static char **get_block_device_symlinks(struct uevent *uevent)
             link_num++;
         else
             links[link_num] = NULL;
-
-        if (is_bootdevice > 0) {
-            if (asprintf(&links[link_num], "/dev/block/bootdevice/by-num/p%d", uevent->partition_num) > 0)
-                link_num++;
-            else
-                links[link_num] = NULL;
-        }
+        if (asprintf(&links[link_num], "/dev/block/bootdevice/by-num/p%d", uevent->partition_num) > 0)
+            link_num++;
+        else
+            links[link_num] = NULL;
     }
 
     slash = strrchr(uevent->path, '/');
