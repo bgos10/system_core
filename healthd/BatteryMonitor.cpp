@@ -243,9 +243,9 @@ bool BatteryMonitor::update(void) {
             path.clear();
             path.appendFormat("%s/%s/type", POWER_SUPPLY_SYSFS_PATH, name);
             switch(readPowerSupplyType(path)) {
-            case ANDROID_POWER_SUPPLY_TYPE_AC:
-            case ANDROID_POWER_SUPPLY_TYPE_USB:
-            case ANDROID_POWER_SUPPLY_TYPE_WIRELESS:
+            case ANDROID_POWER_SUPPLY_TYPE_BATTERY:
+                break;
+            default:
                 path.clear();
                 path.appendFormat("%s/%s/online", POWER_SUPPLY_SYSFS_PATH, name);
                 if (access(path.string(), R_OK) == 0) {
@@ -281,10 +281,6 @@ bool BatteryMonitor::update(void) {
                         }
                     }
                 }
-                break;
-            case ANDROID_POWER_SUPPLY_TYPE_BATTERY:
-                break;
-            default:
                 break;
             } //switch
         } //while
@@ -582,10 +578,16 @@ void BatteryMonitor::init(struct healthd_config *hc) {
         closedir(dir);
     }
 
+    // Read batteryPresent property.
+    if (!mHealthdConfig->batteryPresentPath.isEmpty())
+        props.batteryPresent = getBooleanField(mHealthdConfig->batteryPresentPath);
+    else
+        props.batteryPresent = mBatteryDevicePresent;
+
     // This indicates that there is no charger driver registered.
     // Typically the case for devices which do not have a battery and
     // and are always plugged into AC mains.
-    if (!mChargerNames.size()) {
+    if (!mChargerNames.size() && !props.batteryPresent) {
         KLOG_ERROR(LOG_TAG, "No charger supplies found\n");
         mBatteryFixedCapacity = ALWAYS_PLUGGED_CAPACITY;
         mBatteryFixedTemperature = FAKE_BATTERY_TEMPERATURE;

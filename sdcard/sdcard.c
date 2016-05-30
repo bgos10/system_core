@@ -1474,11 +1474,12 @@ static int handle_init(struct fuse* fuse, struct fuse_handler* handler,
     out.flags = FUSE_ATOMIC_O_TRUNC | FUSE_BIG_WRITES;
 
 #ifdef FUSE_SHORTCIRCUIT
-     out.flags |= FUSE_SHORTCIRCUIT;
+    out.flags |= FUSE_SHORTCIRCUIT;
 #endif
 #ifdef FUSE_STACKED_IO
     out.flags |= FUSE_STACKED_IO;
 #endif
+
     out.max_background = 32;
     out.congestion_threshold = 32;
     out.max_write = MAX_WRITE;
@@ -1922,7 +1923,7 @@ static void run(const char* source_path, const char* label, uid_t uid,
     exit(1);
 }
 
-int main(int argc, char **argv) {
+int sdcard_main(int argc, char **argv) {
     const char *source_path = NULL;
     const char *label = NULL;
     uid_t uid = 0;

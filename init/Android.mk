@@ -60,6 +60,14 @@ $(foreach system_core_init_define,$(SYSTEM_CORE_INIT_DEFINES), \
   ) \
 )
 
+ifneq ($(TARGET_IGNORE_RO_BOOT_SERIALNO),)
+LOCAL_CFLAGS += -DIGNORE_RO_BOOT_SERIALNO
+endif
+
+ifneq ($(TARGET_IGNORE_RO_BOOT_REVISION),)
+LOCAL_CFLAGS += -DIGNORE_RO_BOOT_REVISION
+endif
+
 LOCAL_MODULE:= init
 LOCAL_C_INCLUDES += \
     external/zlib \
