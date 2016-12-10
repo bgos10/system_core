@@ -73,6 +73,7 @@ struct fstab_rec {
     int swap_prio;
     unsigned int zram_size;
     unsigned int file_encryption_mode;
+    unsigned int zram_streams;
 };
 
 // Callback function for verity status
@@ -106,6 +107,7 @@ int fs_mgr_add_entry(struct fstab *fstab,
                      const char *mount_point, const char *fs_type,
                      const char *blk_device);
 struct fstab_rec *fs_mgr_get_entry_for_mount_point(struct fstab *fstab, const char *path);
+struct fstab_rec *fs_mgr_get_entry_for_mount_point_after(struct fstab_rec *start_rec, struct fstab *fstab, const char *path);
 int fs_mgr_is_voldmanaged(const struct fstab_rec *fstab);
 int fs_mgr_is_nonremovable(const struct fstab_rec *fstab);
 int fs_mgr_is_verified(const struct fstab_rec *fstab);
@@ -119,6 +121,7 @@ int fs_mgr_is_formattable(struct fstab_rec *fstab);
 int fs_mgr_is_nofail(struct fstab_rec *fstab);
 int fs_mgr_is_latemount(struct fstab_rec *fstab);
 int fs_mgr_swapon_all(struct fstab *fstab);
+int fs_mgr_is_mdtp_activated(void);
 
 int fs_mgr_do_format(struct fstab_rec *fstab);
 
